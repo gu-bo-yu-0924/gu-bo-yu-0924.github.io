@@ -5,24 +5,81 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ElectronicSpider</title>
-    <!-- 引入外部的JavaScript文件 -->
-    <script src="./test.js"></script>
+    <title>小方块的移动</title>
     <style>
-        /* 移除body的默认外边距和内边距 */
-        body {
-            margin: 0px;
-            padding: 0px;
-            position: fixed;
-            /* 设置网页背景颜色为黑色 */
-            background: rgb(0, 0, 0);
+        .map {
+            position: relative;
+            /* overflow: hidden; */
+            width: 1400px;
+            height: 300px;
+            border: 1px solid black;
+        }
+
+        .char {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            /*即坐标原点在大盒子的左下角*/
+            width: 20px;
+            height: 20px;
+            border: 1px solid black;
+            background-color: pink;
         }
     </style>
 </head>
 
 <body>
-    <!-- 创建一个画布用于图形绘制 -->
-    <canvas id="canvas"></canvas>
+    <p>操作方法:</p>
+    <p>按下A或←左移 D或→右移 S或↓下移 W或↑上移</p>
+    <p>该项目主要目的是理解游戏里面的人物位移操作</p>
+    <div class="map">
+        <div class="char"></div>
+    </div>
+    <script>
+        var char = document.querySelector('.char');
+        var map = document.querySelector('.map');
+        var x = 0;//定义x坐标
+        var y = 0;//定义y坐标
+        //由于小盒子的右边框或上边框到了大盒子的右边框或上边框还会跑出去 为避免这种情况 设置dx dy
+        //当然简单点的话可以使用char.style.right或者char.style.top
+        //但是这里我就是想展示一下自己的数学水平
+        var dx = parseInt(getComputedStyle(map, false).width) - parseInt(getComputedStyle(char, false).width);
+        var dy = parseInt(getComputedStyle(map, false).height) - parseInt(getComputedStyle(char, false).height);
+        document.addEventListener('keydown', function (e) {
+            // console.log(e.keyCode);
+            // console.log(e.key);
+            //向左移动
+            if (e.key === 'a' || e.key === 'A' || e.key === 'ArrowLeft') {
+                if (x > 0) {
+                    x -= 20;
+                    char.style.left = x + 'px';
+                }
+            }
+            //向右移动
+            else if (e.key === 'd' || e.key === 'D' || e.key === 'ArrowRight') {
+                if (x < dx) {
+                    x += 20;
+                    char.style.left = x + 'px';
+                }
+            }
+            //向下移动
+            else if (e.key === 's' || e.key === 'S' || e.key === 'ArrowDown') {
+                if (y > 0) {
+                    y -= 20;
+                    char.style.bottom = y + 'px';
+                }
+            }
+            //向上移动
+            else if (e.key === 'w' || e.key === 'W' || e.key === 'ArrowUp') {
+                if (y < dy) {
+                    y += 20;
+                    char.style.bottom = y + 'px';
+                }
+            }
+
+        })
+
+    </script>
 </body>
 
 </html>
